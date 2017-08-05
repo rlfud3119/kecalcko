@@ -1,0 +1,809 @@
+
+<html>
+<meta http-equiv="content-Type" content="text/html; charset=utf-8">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/iframeResizer.contentWindow.min_.js"></script>
+<style>
+        .section-help {
+            font-style: italic;
+        }
+
+        a {
+            color: #ff9201;
+            -webkit-transition: color 1s ease;
+            -moz-transition: color 1s ease;
+            -o-transition: color 1s ease;
+            -ms-transition: color 1s ease;
+            transition: color 1s ease;
+        }
+
+        a:hover {
+            color: black;
+            text-decoration: none;
+        }
+
+        .glyphicon {
+            color: #ff9201;
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+    </style>
+<script type="text/javascript">
+        // Update Body Composition fields
+        function updateBodyComposition() {
+            var weightlbs = $('#i_weightlbs').val();
+            var weightkg = $('#i_weightkg').val();
+            var bodyfat = $('#i_bodyfat').val();
+
+            $('#o_leanlbs').val(((weightlbs * (100 - bodyfat)) / 100).toFixed(2));
+            $('#o_leankg').val(((weightkg * (100 - bodyfat)) / 100).toFixed(2));
+            var leankg = $('#o_leankg').val();
+            $('#o_bmr').val((370 + (21.6 * leankg)).toFixed(0));
+            var bmr = parseInt($('#o_bmr').val());
+            $('#o_tef').val((bmr * 0.1).toFixed(0));
+            var tef = parseInt($('#o_tef').val());
+            $('#o_bmrtef').val(bmr + tef);
+
+            $('#i_weightcalmin').val((weightkg * 0.1).toFixed(2));
+        }
+
+        // Update Exercise Info Table
+        function updateExercise() {
+            var weightkg = $('#i_weightkg').val();
+
+            var weightmins = $('#i_weightmins').val();
+            var cardiomins = $('#i_cardiomins').val();
+            var othermins = $('#i_othermins').val();
+
+            var weightcalmin = $('#i_weightcalmin').val();
+            var cardiocalmin = $('#i_cardiocalmin').val();
+            var othercalmin = $('#i_othercalmin').val();
+
+            $('#i_weightcalmin').val((weightkg * 0.1).toFixed(2));
+
+            $('#o_weightcaltot').val(weightmins * weightcalmin);
+            var weightcaltot = parseInt($('#o_weightcaltot').val());
+
+            $('#o_cardiocaltot').val(cardiomins * cardiocalmin);
+            var cardiocaltot = parseInt($('#o_cardiocaltot').val());
+
+            $('#o_othercaltot').val(othermins * othercalmin);
+            var othercaltot = parseInt($('#o_othercaltot').val());
+
+            $('#o_burnttot').val(weightcaltot + cardiocaltot + othercaltot);
+
+
+        }
+
+        // Set recommended calorie deficit
+        function updateCalorieDeficit() {
+            var bodyfat = $('#i_bodyfat').val();
+            var caldeficit = 10;
+
+            if (bodyfat >= 30) {
+                caldeficit = 25;
+            } else if (bodyfat >= 20) {
+                caldeficit = 20;
+            } else if (bodyfat >= 15) {
+                caldeficit = 15;
+            }
+
+            $('#i_caldeficit').val(caldeficit);
+        }
+
+        // Set recommended calorie deficit
+        function updateCalorieSurplus() {
+            var bodyfat = $('#i_bodyfat').val();
+            var calsurplus = 10;
+
+            if (bodyfat >= 30) {
+                calsurplus = 0;
+            } else if (bodyfat >= 20) {
+                calsurplus = 2;
+            } else if (bodyfat >= 15) {
+                calsurplus = 5;
+            }
+
+            $('#i_calsurplus').val(calsurplus);
+        }
+
+        // Update calories stats
+        function updateCalories() {
+            var tdee = parseInt($('#o_tdee').val());
+            var tdee_exercise = tdee + parseInt($('#o_burnttot').val());
+
+            var caldeficit = parseInt($('#i_caldeficit').val());
+            var calsurplus = parseInt($('#i_calsurplus').val());
+
+            var lose1 = (tdee * ((100 - caldeficit) / 100)).toFixed(0);
+            var maintain1 = (tdee).toFixed(0);
+            var gain1 = (tdee).toFixed(0);
+
+            $('#o_lose1').val(lose1);
+            $('#o_maintain1').val(maintain1);
+            $('#o_gain1').val(gain1);
+
+            $('#o_lose2').val((tdee_exercise * ((100 - caldeficit) / 100)).toFixed(0));
+            $('#o_maintain2').val((tdee_exercise).toFixed(0));
+            $('#o_gain2').val((tdee_exercise * ((100 + calsurplus) / 100)).toFixed(0));
+
+
+            // Ensure table is refreshed
+            updateMacros();
+
+            var proteinCarbCals = (parseInt($('#o_proteincals').val(),10)+parseInt($('#o_carbcals').val(),10));
+            var fatmacro = 116;
+            var totalcals = lose1;
+
+            var goal = $('input[name=goal]:checked').val();
+            if (goal == 'lose') {
+                totalcals = lose1;
+            }
+            if (goal == 'maintain') {
+                totalcals = maintain1;
+            }
+            if (goal == 'gain') {
+                totalcals = gain1;
+            }
+            fatmacro = ((totalcals - proteinCarbCals)/9).toFixed(0);
+
+            $('#i_fatmacro').val(fatmacro);
+
+            console.log(goal+'->'+proteinCarbCals+' / '+totalcals+' / '+fatmacro);
+        }
+
+        // Update macros
+        function updateMacros() {
+            var weightkg = $('#i_weightkg').val();
+            var leanlbs = $('#o_leanlbs').val();
+            var ratio = $('#i_ratio').val();
+
+            if ($('#kgrecommended').prop('checked')) {
+                var proteinmacro = (leanlbs * 1.0).toFixed(0);
+            }
+            else {
+                var proteinmacro = (leanlbs * ratio).toFixed(0);
+            }
+            var carbmacro = $('#i_carbmacro').val();
+            var fatmacro = $('#i_fatmacro').val();
+
+            $('#o_proteinmacro').val(proteinmacro);
+
+            var proteincals = (4 * proteinmacro).toFixed(0);
+            var carbcals = (4 * carbmacro).toFixed(0);
+            var fatcals = (9 * fatmacro).toFixed(0);
+
+            $('#o_proteincals').val(proteincals);
+            $('#o_carbcals').val(carbcals);
+            $('#o_fatcals').val(fatcals);
+            var totalcals = parseInt(proteincals) + parseInt(carbcals) + parseInt(fatcals);
+            $('#o_totalcals').val(totalcals);
+
+            var proteinpercent = (proteincals / totalcals * 100).toFixed(0);
+            var carbpercent = (carbcals / totalcals * 100).toFixed(0);
+            var fatpercent = (fatcals / totalcals * 100).toFixed(0);
+
+            $('#o_proteinpercent').val(proteinpercent);
+            $('#o_carbpercent').val(carbpercent);
+            $('#o_fatpercent').val(fatpercent);
+            var totalpercent = parseInt(proteinpercent) + parseInt(carbpercent) + parseInt(fatpercent);
+            $('#o_totalpercent').val(totalpercent);
+        }
+
+        function updateTDEE() {
+            var activitymod = $('input[name=activitylevel]:checked').val();
+            var bmrtef = $('#o_bmrtef').val();
+            $('#o_tdee').val((bmrtef * activitymod).toFixed(0));
+        }
+
+        // Document.ready
+        $(function () {
+            // Enable tooltips and popovers
+            $("[data-toggle='tooltip']").tooltip();
+            $('[data-toggle="popover"]').popover({trigger: "hover"});
+
+            updateExercise();
+            $('.hide_deficit').hide();
+            $('.hide_surplus').hide();
+
+            // Update the body composition fields
+            $('#i_weightlbs').on('input', function (e) {
+                $('#i_weightkg').val(($('#i_weightlbs').val() / 2.2046224).toFixed(2));
+                if (($('#i_weightlbs').val() > 0) && ($('#i_bodyfat').val() > 0)) {
+                    updateBodyComposition();
+                    updateTDEE();
+                    updateCalories();
+                    updateMacros();
+                }
+            });
+            $('#i_weightkg').on('input', function (e) {
+                $('#i_weightlbs').val(($('#i_weightkg').val() * 2.2046224).toFixed(2));
+                if (($('#i_weightkg').val() > 0) && ($('#i_bodyfat').val() > 0)) {
+                    updateBodyComposition();
+                    updateTDEE();
+                    updateCalories();
+                    updateMacros();
+                }
+            });
+            $('#i_bodyfat').on('input', function (e) {
+                updateCalorieDeficit();
+                updateCalorieSurplus();
+                if ((($('#i_weightkg').val() > 0) || ($('#i_weightlbs').val() > 0)) && ($('#i_bodyfat').val() > 0)) {
+                    updateBodyComposition();
+                    updateTDEE();
+                    updateCalories();
+                    updateMacros();
+                }
+            });
+
+            // Update the activity level and TDEE value
+            $('input[type=radio][name="activitylevel"]').change(function (e) {
+                var activitymod = $('input[name=activitylevel]:checked').val();
+
+                if (activitymod == "1") {
+                    $('#o_tdee').prop('disabled', false);
+                }
+                else {
+                    $('#o_tdee').prop('disabled', true);
+                }
+
+                updateTDEE();
+                updateCalories();
+                updateMacros();
+            });
+
+            // Update fields based on manual TDEE
+            $('#o_tdee').on('input', function (e) {
+                updateCalories();
+                updateMacros();
+            });
+
+            // Update the Exercise info table
+            $('#i_weightmins, #i_cardiomins, #i_othermins, #i_weightcalmin, #i_cardiocalmin, #i_othercalmin').on('input', function (e) {
+                updateExercise();
+                updateCalories();
+                updateMacros();
+            });
+
+            // Show or hide calorie fields depending on radio chosen
+            $('input[type=radio][name="goal"]').change(function (e) {
+                var goal = $('input[name=goal]:checked').val();
+                if (goal == 'lose') {
+                    $('.hide_deficit').show();
+                    $('.hide_maintain').hide();
+                    $('.hide_surplus').hide();
+                }
+                if (goal == 'maintain') {
+                    $('.hide_deficit').hide();
+                    $('.hide_maintain').show();
+                    $('.hide_surplus').hide();
+                }
+                if (goal == 'gain') {
+                    $('.hide_deficit').hide();
+                    $('.hide_maintain').hide();
+                    $('.hide_surplus').show();
+                }
+                updateCalories();
+                updateMacros();
+            });
+
+            // Update the calories fields
+            $('#i_caldeficit, #i_calsurplus').on('input', function (e) {
+                updateCalories();
+                updateMacros();
+            });
+
+            // Update the macros table
+            $('#i_ratio, #i_carbmacro, #i_fatmacro').on('input', function (e) {
+                updateMacros();
+            });
+
+            // Update the value for Ketogains Recommended
+            $('input[type=checkbox][name="kgrecommended"]').change(function () {
+                if (this.checked) {
+                    $("#i_ratio").prop('disabled', true);
+                    updateMacros();
+                }
+                else {
+                    $("#i_ratio").prop('disabled', false);
+                    updateMacros();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="col-lg-9 col-md-12">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+<div class="panel-heading" role="tab" id="headingOne">
+<a data-toggle="collapse" href="#collapseOne" data-parent="#accordion" aria-expanded="true" aria-controls="collapseOne" class="">
+<h5 class="panel-title">
+1년내에 얼마나 많은 근육을 만들수 있을까요?
+</h5>
+</a>
+</div>
+<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+<table class="table table-hover">
+<thead>
+<tr>
+<th>트레이닝 기간 (연)</th>
+<th>근육의 잠재적인 비율 (연)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>20-25 lbs (월 2 lb)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10-12 lbs (월 1 lb)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>5-6 lbs (월 0.5 lb)</td>
+</tr>
+<tr>
+<td>4+</td>
+<td>2-3 lbs (????)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading" role="tab" id="headingTwo">
+<a data-toggle="collapse" href="#collapseTwo" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+<h5 class="panel-title">
+근욱 손실을 최소화 하기 위해 일주일에 얼마만큼 안전하게 체지방을 태울 수 있을까요?
+</h5>
+</a>
+</div>
+<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+<table class="table table-hover">
+<thead>
+<tr>
+<th>체지방 % (남 / 여)</th>
+<th>지방감량 (주)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18-19% / 24-25%</td>
+<td>1.7 lb/주</td>
+</tr>
+<tr>
+<td>15-17% / 20-22%</td>
+<td>1.5 lb/주</td>
+</tr>
+<tr>
+<td>12-14% / 17-19%</td>
+<td>1.3 lb/주</td>
+</tr>
+<tr>
+<td>9-11% / 14-16%</td>
+<td>1.0 lb/주</td>
+</tr>
+<tr>
+<td>&lt;8% / &lt;14%</td>
+<td>0.7 lb/주</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<h3>신체 구성</h3>
+<p class="section-help">현제ㅔ 체중을 파운드 또는 킬로그램으로 설정하고 체지방 비율로 설정 하십시요. (<a href="//ketogains.com/2015/09/how-to-estimate-your-body-fat-percentage-bf/" target="_blank">How
+to visually estimate bodyfat %</a>)</p>
+<div class="row">
+<div class="col-lg-3 col-md-4">
+<div class="row">
+<div class="col-md-12">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="form">
+<div class="form-group">
+<label for="i_weightlbs">Weight (lbs)</label>
+<div class="input-group">
+<input type="number" id="i_weightlbs" class="form-control" placeholder="Weight (lbs)">
+<div class="input-group-addon">lbs</div>
+</div>
+</div>
+<div class="form-group">
+<label for="i_weightkg">Weight (kg)</label>
+<div class="input-group">
+<input type="number" id="i_weightkg" class="form-control" placeholder="Weight (kg)">
+<div class="input-group-addon">kg</div>
+</div>
+</div>
+<div class="form-group">
+<label for="i_bodyfat">Bodyfat %</label>
+<div class="input-group">
+<input type="number" id="i_bodyfat" class="form-control" placeholder="Bodyfat %">
+<div class="input-group-addon">%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 col-md-4">
+<div class="row">
+<div class="col-md-12">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="form">
+<div class="form-group">
+<label for="o_leanlbs">Lean lbs</label>
+<div class="input-group">
+<input type="number" id="o_leanlbs" class="form-control" disabled="">
+<div class="input-group-addon">lbs</div>
+</div>
+</div>
+<div class="form-group">
+<label for="o_leankg">Lean kg</label>
+<div class="input-group">
+<input type="number" id="o_leankg" class="form-control" disabled="">
+<div class="input-group-addon">kg</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 col-md-4">
+ <div class="row">
+<div class="col-md-12">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="form">
+<div class="form-group">
+<label for="o_bmr">BMR <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="<b>Basal Metabolic Rate</b><br>Calculated using the Katch McCardle formula." data-original-title="" title=""></span></label>
+<div class="input-group">
+<input type="number" id="o_bmr" class="form-control" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+<div class="form-group">
+<label for="o_tef">TEF <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="<b>Thermic Effect of Food</b><br>TEF is calculated at a baseline of 10%, some adjustmements may be needed according to each individual." data-original-title="" title=""></span></label>
+<div class="input-group">
+<input type="number" id="o_tef" class="form-control" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+<div class="form-group">
+<label for="o_bmrtef">BMR + TEF</label>
+<div class="input-group">
+<input type="number" id="o_bmrtef" class="form-control" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 visible-lg-block"></div>
+</div> 
+</div> 
+</div> 
+
+<div class="row">
+<div class="col-md-12">
+<h3>Activity Level (not counting exercise):</h3>
+<p class="section-help">Set your usual activity level. This does not include additional exercise like gym,
+running, etc. If not known, choose Sedentary. Choose "Custom" to set your TDEE manually.</p>
+<p class="section-help">Multipliers for activities are taken from Chapter 8 of "<a href="//www.amazon.com/Advanced-Nutrition-Human-Metabolism-5th/dp/B003I09SZM">Advanced
+Nutrition and Human Metabolism, 5th Edition</a>"</p>
+<div class="row">
+<div class="col-lg-6 col-md-8">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="radio"><label><input type="radio" name="activitylevel" value="1.00" checked="">
+Sedentary - Typical desk job / Sitting most of the day</label></div>
+<div class="radio"><label><input type="radio" name="activitylevel" value="1.12"> Lightly
+Active - Walking around a good amount, retail jobs</label></div>
+<div class="radio"><label><input type="radio" name="activitylevel" value="1.26"> Moderately
+Active - Walking constantly in a fast paced environment, waiting tables</label></div>
+<div class="radio"><label><input type="radio" name="activitylevel" value="1.47"> Vigorously
+Active - Very labor intensive, construction workers</label></div>
+<div class="radio"><label><input type="radio" name="activitylevel" value="1"> Custom - I'll
+set my TDEE manually <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-placement="top" data-html="true" data-content="Set this information in the 'Daily Exercise Info' section and follow the calories under 'Daily calories with exercise'." data-original-title="" title=""></span></label>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 col-md-4">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="form">
+<div class="form-group">
+<label for="">TDEE <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-placement="top" data-html="true" data-content="<b>Total Daily Energy Expenditure</b><br>3,500 kcals = 1lb fat." data-original-title="" title=""></span></label>
+<div class="input-group">
+<input type="number" id="o_tdee" class="form-control" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 visible-lg-block"></div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<h3>Daily Calories</h3>
+<p class="section-help">Set your goal to get your recommended calorie intake. If you used the Exercise Info
+section above, then you can compare calories for those days that you exercise and those that you don't.
+It is not recommended to go over 25% deficit for fat loss or over 15% surplus for muscle gain.</p>
+<div class="row">
+<div class="col-lg-3 col-md-4">
+<div class="panel panel-default">
+<div class="panel-heading"><strong>Calorie Goal</strong></div>
+<div class="panel-body">
+<div class="form">
+<div class="form-group">
+<div class="radio"><label><input type="radio" name="goal" value="lose"> Lose
+Fat</label></div>
+<div class="radio"><label><input type="radio" name="goal" value="maintain" checked="">
+Maintain</label></div>
+<div class="radio"><label><input type="radio" name="goal" value="gain"> Gain Muscle</label>
+</div>
+</div>
+<div class="form-group hide_deficit" style="display: none;">
+ <label for="">Calorie Deficit</label>
+<div class="input-group">
+<input type="number" class="form-control" id="i_caldeficit" value="10">
+<div class="input-group-addon">%</div>
+</div>
+</div>
+<div class="form-group hide_surplus" style="display: none;">
+<label for="">Calorie Surplus</label>
+<div class="input-group">
+<input type="number" class="form-control" id="i_calsurplus" value="15">
+<div class="input-group-addon">%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 col-md-4">
+<div class="panel panel-default">
+<div class="panel-heading"><strong>Calories without Exercise</strong></div>
+<div class="panel-body">
+<div class="form">
+<div class="form-group hide_deficit" style="display: none;">
+<label for="">Lose Fat</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_lose1" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+<div class="form-group hide_maintain">
+<label for="">Maintain Weight</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_maintain1" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+<div class="form-group hide_surplus" style="display: none;">
+<label for="">Gain Muscle</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_gain1" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 col-md-4">
+<div class="panel panel-default">
+<div class="panel-heading"><strong>Calories with Exercise</strong></div>
+<div class="panel-body">
+<div class="form">
+<div class="form-group hide_deficit" style="display: none;">
+<label for="">Lose Fat</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_lose2" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+<div class="form-group hide_maintain">
+<label for="">Maintain Weight</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_maintain2" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+ </div>
+<div class="form-group hide_surplus" style="display: none;">
+<label for="">Gain Muscle</label>
+<div class="input-group">
+<input type="number" class="form-control" id="o_gain2" disabled="">
+<div class="input-group-addon">kcal</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> 
+<div class="col-lg-3 visible-lg-block"></div>
+</div> 
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<h3>Daily Exercise Info</h3>
+<p class="section-help">If needed, set your exercise information for those days that you will be exercising.
+(<a href="//www.healthstatus.com/calculate/cbc" target="_blank">Click here for Kcal / min
+calculations</a>). This will allow you
+to compare calorie limits on those days that you exercise against those that you don't.</p>
+<div class="row">
+<div class="col-lg-9 col-md-12">
+<div class="panel panel-default">
+<div class="table-responsive">
+<table class="table table-hover">
+<thead>
+<tr>
+<th>Activity</th>
+<th>Minutes</th>
+<th>Kcal burned / min</th>
+<th>Total Kcal burned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weights <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Actual time spent lifting weights, rest does not count." data-original-title="" title=""></span></td>
+<td><input type="number" id="i_weightmins" class="form-control" value="30"></td>
+<td><input type="number" id="i_weightcalmin" class="form-control" value="0" disabled=""></td>
+<td><input type="number" id="o_weightcaltot" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td>Cardio</td>
+<td><input type="number" id="i_cardiomins" class="form-control" value="0"></td>
+<td><input type="number" id="i_cardiocalmin" class="form-control" value="6"></td>
+<td><input type="number" id="o_cardiocaltot" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td>Other</td>
+<td><input type="number" id="i_othermins" class="form-control" value="0"></td>
+<td><input type="number" id="i_othercalmin" class="form-control" value="0"></td>
+<td><input type="number" id="o_othercaltot" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><input type="number" id="o_burnttot" class="form-control" disabled=""></td>
+</tr>
+ </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="col-lg-3 visible-lg-block"></div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<h3>Daily Macros</h3>
+<p class="section-help">Adjust your protein ratio:</p>
+<ul class="section-help">
+<li class="DELhide_maintain">To maintain muscle, leave protein ratio between 0.69 to 0.8. It is not
+recommended to drop below 0.69 or muscle loss may occur.
+</li>
+<li class="DELhide_surplus">To gain muscle, the protein ratio should be between 0.8 to 1.2.
+</li>
+<li class="">There is normally no advantage to consuming more than 0.82g/lb (1.8g/kg) of protein per day
+to preserve or build muscle once you're past the novice level as a natural trainee. <a href="//bayesianbodybuilding.com/the-myth-of-1glb-optimal-protein-intake-for-bodybuilders/">Source</a>.
+</li>
+</ul>
+<p class="section-help">Adjust the carbs and fat grams to reach daily calorie goals. If doing a Standard
+Ketogenic Diet, carbs should be set lower than 30g:</p>
+<ul class="section-help">
+<li>It is suggested you count carbs as TOTAL for all foods, except for green veggies and avocado, on
+those count as NET.
+</li>
+<li>If doing <a href="//www.ruled.me/targeted-ketogenic-diet-indepth-look/" target="_blank">TKD</a>
+or <a href="//www.ruled.me/cyclical-ketogenic-diet-indepth-look/" target="_blank">CKD</a>,
+remember to include net carbs consumed on Macro Grams.
+</li>
+</ul>
+<div class="row">
+<div class="col-lg-9 col-md-12">
+<div class="panel panel-default">
+<div class="table-responsive">
+<table class="table table-hover">
+<thead>
+<tr>
+<th>Protein Ratio <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Number of grams per lb of lean body mass. Recommendation is 1." data-original-title="" title=""></span>
+</th>
+<th>Macronutrients</th>
+<th>Macro Grams</th>
+<th>Kcal per gram</th>
+<th>Daily Calories</th>
+<th>Daily %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><input type="number" id="i_ratio" class="form-control" value="0.8" step="0.01" max="1.2" min="0.69"></td>
+<td>Protein</td>
+<td><input type="number" id="o_proteinmacro" class="form-control" disabled=""></td>
+<td>4</td>
+<td><input type="number" id="o_proteincals" class="form-control" disabled=""></td>
+<td><input type="number" id="o_proteinpercent" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td>
+<div class="form">
+<div class="form-group">
+<div class="checkbox"><label><input type="checkbox" id="kgrecommended" name="kgrecommended" value="0">
+Ketogains Recommended</label> <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="1.0g protein / Lean Lb Bodyweight" data-original-title="" title=""></span></div>
+</div>
+</div>
+</td>
+<td>Net Carbs <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Net Carbs = Total Carbs - Fiber." data-original-title="" title=""></span></td>
+<td><input type="number" id="i_carbmacro" class="form-control" value="25"></td>
+<td>4</td>
+<td><input type="number" id="o_carbcals" class="form-control" disabled=""></td>
+<td><input type="number" id="o_carbpercent" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td></td>
+<td>Fat</td>
+<td><input type="number" id="i_fatmacro" class="form-control" value="116"></td>
+<td>9</td>
+<td><input type="number" id="o_fatcals" class="form-control" disabled=""></td>
+<td><input type="number" id="o_fatpercent" class="form-control" disabled=""></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><input type="number" id="o_totalcals" class="form-control" disabled=""></td>
+<td><input type="number" id="o_totalpercent" class="form-control" disabled=""></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="col-lg-3 visible-lg-block"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="clear: both; display: block;"></div></body></html>
