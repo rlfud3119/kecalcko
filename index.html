@@ -38,7 +38,6 @@
         }
     </style>
 <script type="text/javascript">
-        // Update Body Composition fields
         function updateBodyComposition() {
             var weightlbs = $('#i_weightlbs').val();
             var weightkg = $('#i_weightkg').val();
@@ -56,7 +55,6 @@
             $('#i_weightcalmin').val((weightkg * 0.1).toFixed(2));
         }
 
-        // Update Exercise Info Table
         function updateExercise() {
             var weightkg = $('#i_weightkg').val();
 
@@ -84,7 +82,6 @@
 
         }
 
-        // Set recommended calorie deficit
         function updateCalorieDeficit() {
             var bodyfat = $('#i_bodyfat').val();
             var caldeficit = 10;
@@ -100,7 +97,6 @@
             $('#i_caldeficit').val(caldeficit);
         }
 
-        // Set recommended calorie deficit
         function updateCalorieSurplus() {
             var bodyfat = $('#i_bodyfat').val();
             var calsurplus = 10;
@@ -116,7 +112,6 @@
             $('#i_calsurplus').val(calsurplus);
         }
 
-        // Update calories stats
         function updateCalories() {
             var tdee = parseInt($('#o_tdee').val());
             var tdee_exercise = tdee + parseInt($('#o_burnttot').val());
@@ -137,7 +132,6 @@
             $('#o_gain2').val((tdee_exercise * ((100 + calsurplus) / 100)).toFixed(0));
 
 
-            // Ensure table is refreshed
             updateMacros();
 
             var proteinCarbCals = (parseInt($('#o_proteincals').val(),10)+parseInt($('#o_carbcals').val(),10));
@@ -161,7 +155,6 @@
             console.log(goal+'->'+proteinCarbCals+' / '+totalcals+' / '+fatmacro);
         }
 
-        // Update macros
         function updateMacros() {
             var weightkg = $('#i_weightkg').val();
             var leanlbs = $('#o_leanlbs').val();
@@ -205,9 +198,8 @@
             $('#o_tdee').val((bmrtef * activitymod).toFixed(0));
         }
 
-        // Document.ready
         $(function () {
-            // Enable tooltips and popovers
+
             $("[data-toggle='tooltip']").tooltip();
             $('[data-toggle="popover"]').popover({trigger: "hover"});
 
@@ -215,7 +207,6 @@
             $('.hide_deficit').hide();
             $('.hide_surplus').hide();
 
-            // Update the body composition fields
             $('#i_weightlbs').on('input', function (e) {
                 $('#i_weightkg').val(($('#i_weightlbs').val() / 2.2046224).toFixed(2));
                 if (($('#i_weightlbs').val() > 0) && ($('#i_bodyfat').val() > 0)) {
@@ -245,7 +236,6 @@
                 }
             });
 
-            // Update the activity level and TDEE value
             $('input[type=radio][name="activitylevel"]').change(function (e) {
                 var activitymod = $('input[name=activitylevel]:checked').val();
 
@@ -261,20 +251,18 @@
                 updateMacros();
             });
 
-            // Update fields based on manual TDEE
             $('#o_tdee').on('input', function (e) {
                 updateCalories();
                 updateMacros();
             });
 
-            // Update the Exercise info table
+
             $('#i_weightmins, #i_cardiomins, #i_othermins, #i_weightcalmin, #i_cardiocalmin, #i_othercalmin').on('input', function (e) {
                 updateExercise();
                 updateCalories();
                 updateMacros();
             });
 
-            // Show or hide calorie fields depending on radio chosen
             $('input[type=radio][name="goal"]').change(function (e) {
                 var goal = $('input[name=goal]:checked').val();
                 if (goal == 'lose') {
@@ -296,18 +284,15 @@
                 updateMacros();
             });
 
-            // Update the calories fields
             $('#i_caldeficit, #i_calsurplus').on('input', function (e) {
                 updateCalories();
                 updateMacros();
             });
 
-            // Update the macros table
             $('#i_ratio, #i_carbmacro, #i_fatmacro').on('input', function (e) {
                 updateMacros();
             });
 
-            // Update the value for Ketogains Recommended
             $('input[type=checkbox][name="kgrecommended"]').change(function () {
                 if (this.checked) {
                     $("#i_ratio").prop('disabled', true);
