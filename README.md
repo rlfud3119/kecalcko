@@ -2,6 +2,7 @@
 ## ※English To Korean※
 ## ※영문에서 한국어로※
 ### ※영문에 너무 취약하여 구글번역기를 사용하여 번역 하였습니다.※
+---
 1. I want to build huge muscles. How much muscle can I build within a year?
 2. Years of Proper Training
 3. Potential Rate of Muscle Gain (Per Year)
