@@ -559,14 +559,14 @@ TDEE 수동 설정 <span class="glyphicon glyphicon-question-sign" data-toggle="
 </div>
 </div>
 <div class="form-group hide_deficit" style="display: none;">
- <label for="">Calorie Deficit</label>
+ <label for="">칼로리 결핍</label>
 <div class="input-group">
 <input type="number" class="form-control" id="i_caldeficit" value="10">
 <div class="input-group-addon">%</div>
 </div>
 </div>
 <div class="form-group hide_surplus" style="display: none;">
-<label for="">Calorie Surplus</label>
+<label for="">칼로리 잉여</label>
 <div class="input-group">
 <input type="number" class="form-control" id="i_calsurplus" value="15">
 <div class="input-group-addon">%</div>
@@ -578,25 +578,25 @@ TDEE 수동 설정 <span class="glyphicon glyphicon-question-sign" data-toggle="
 </div> 
 <div class="col-lg-3 col-md-4">
 <div class="panel panel-default">
-<div class="panel-heading"><strong>Calories without Exercise</strong></div>
+<div class="panel-heading"><strong>운동이 없는 칼로리</strong></div>
 <div class="panel-body">
 <div class="form">
 <div class="form-group hide_deficit" style="display: none;">
-<label for="">Lose Fat</label>
+<label for="">지방 감소</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_lose1" disabled="">
 <div class="input-group-addon">kcal</div>
 </div>
 </div>
 <div class="form-group hide_maintain">
-<label for="">Maintain Weight</label>
+<label for="">무게 유지</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_maintain1" disabled="">
 <div class="input-group-addon">kcal</div>
 </div>
 </div>
 <div class="form-group hide_surplus" style="display: none;">
-<label for="">Gain Muscle</label>
+<label for="">근육 게인</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_gain1" disabled="">
 <div class="input-group-addon">kcal</div>
@@ -608,25 +608,25 @@ TDEE 수동 설정 <span class="glyphicon glyphicon-question-sign" data-toggle="
 </div> 
 <div class="col-lg-3 col-md-4">
 <div class="panel panel-default">
-<div class="panel-heading"><strong>Calories with Exercise</strong></div>
+<div class="panel-heading"><strong>운동과 칼로리</strong></div>
 <div class="panel-body">
 <div class="form">
 <div class="form-group hide_deficit" style="display: none;">
-<label for="">Lose Fat</label>
+<label for="">지방 감소</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_lose2" disabled="">
 <div class="input-group-addon">kcal</div>
 </div>
 </div>
 <div class="form-group hide_maintain">
-<label for="">Maintain Weight</label>
+<label for="">무게 유지</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_maintain2" disabled="">
 <div class="input-group-addon">kcal</div>
 </div>
  </div>
 <div class="form-group hide_surplus" style="display: none;">
-<label for="">Gain Muscle</label>
+<label for="">근육 게인</label>
 <div class="input-group">
 <input type="number" class="form-control" id="o_gain2" disabled="">
 <div class="input-group-addon">kcal</div>
@@ -643,11 +643,11 @@ TDEE 수동 설정 <span class="glyphicon glyphicon-question-sign" data-toggle="
 
 <div class="row">
 <div class="col-md-12">
-<h3>Daily Exercise Info</h3>
-<p class="section-help">If needed, set your exercise information for those days that you will be exercising.
+<h3>매일 운동 정보</h3>
+<p class="section-help">필요한 경우, 운동 할 요일에 대한 운동 정보를 설정하십시오.
 (<a href="//www.healthstatus.com/calculate/cbc" target="_blank">Click here for Kcal / min
-calculations</a>). This will allow you
-to compare calorie limits on those days that you exercise against those that you don't.</p>
+calculations</a>). 이렇게하면
+너가하지 않는 그들에 운동하는 그 일에 칼로리 한계를 비교하기 위하여.</p>
 <div class="row">
 <div class="col-lg-9 col-md-12">
 <div class="panel panel-default">
@@ -655,27 +655,27 @@ to compare calorie limits on those days that you exercise against those that you
 <table class="table table-hover">
 <thead>
 <tr>
-<th>Activity</th>
-<th>Minutes</th>
-<th>Kcal burned / min</th>
-<th>Total Kcal burned</th>
+<th>활동</th>
+<th>의사록</th>
+<th>Kcal 연소 / 분</th>
+<th>총 Kcal 연소</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Weights <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Actual time spent lifting weights, rest does not count." data-original-title="" title=""></span></td>
+<td>무게 <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Actual time spent lifting weights, rest does not count." data-original-title="" title=""></span></td>
 <td><input type="number" id="i_weightmins" class="form-control" value="30"></td>
 <td><input type="number" id="i_weightcalmin" class="form-control" value="0" disabled=""></td>
 <td><input type="number" id="o_weightcaltot" class="form-control" disabled=""></td>
 </tr>
 <tr>
-<td>Cardio</td>
+<td>무술</td>
 <td><input type="number" id="i_cardiomins" class="form-control" value="0"></td>
 <td><input type="number" id="i_cardiocalmin" class="form-control" value="6"></td>
 <td><input type="number" id="o_cardiocaltot" class="form-control" disabled=""></td>
 </tr>
 <tr>
-<td>Other</td>
+<td>다른</td>
 <td><input type="number" id="i_othermins" class="form-control" value="0"></td>
 <td><input type="number" id="i_othercalmin" class="form-control" value="0"></td>
 <td><input type="number" id="o_othercaltot" class="form-control" disabled=""></td>
@@ -698,27 +698,27 @@ to compare calorie limits on those days that you exercise against those that you
 
 <div class="row">
 <div class="col-md-12">
-<h3>Daily Macros</h3>
-<p class="section-help">Adjust your protein ratio:</p>
+<h3>매일 매크로</h3>
+<p class="section-help">단백질 비율 조정:</p>
 <ul class="section-help">
-<li class="DELhide_maintain">To maintain muscle, leave protein ratio between 0.69 to 0.8. It is not
-recommended to drop below 0.69 or muscle loss may occur.
+<li class="DELhide_maintain">근육을 유지하려면 0.69에서 0.8 사이의 단백질 비율을 유지하십시오. 그것은 아니다.
+0.69 이하로 떨어 뜨리거나 근육 손실이 발생할 수 있습니다.
 </li>
-<li class="DELhide_surplus">To gain muscle, the protein ratio should be between 0.8 to 1.2.
+<li class="DELhide_surplus">근육을 얻기 위해서는 단백질 비율이 0.8에서 1.2 사이 여야합니다.
 </li>
-<li class="">There is normally no advantage to consuming more than 0.82g/lb (1.8g/kg) of protein per day
-to preserve or build muscle once you're past the novice level as a natural trainee. <a href="//bayesianbodybuilding.com/the-myth-of-1glb-optimal-protein-intake-for-bodybuilders/">Source</a>.
+<li class="">일반적으로 하루에 0.82g / lb (1.8g / kg) 이상의 단백질을 섭취하는 이점은 없습니다
+자연스런 연수생으로서 초보자 수준을 넘으면 근육을 보존하거나 구축 할 수 있습니다. <a href="//bayesianbodybuilding.com/the-myth-of-1glb-optimal-protein-intake-for-bodybuilders/">Source</a>.
 </li>
 </ul>
-<p class="section-help">Adjust the carbs and fat grams to reach daily calorie goals. If doing a Standard
-Ketogenic Diet, carbs should be set lower than 30g:</p>
+<p class="section-help">매일 칼로리 목표에 도달하도록 탄수화물과 지방 그램을 조절하십시오. 표준을 수행하는 경우
+Ketogenic 다이어트, 탄수화물은 30g보다 낮게 설정해야합니다 :</p>
 <ul class="section-help">
-<li>It is suggested you count carbs as TOTAL for all foods, except for green veggies and avocado, on
-those count as NET.
+<li>초록색 채소와 아보카도를 제외한 모든 음식에 대한 총 탄수화물 섭취량을 계산하는 것이 좋습니다.
+NET으로 계산됩니다.
 </li>
-<li>If doing <a href="//www.ruled.me/targeted-ketogenic-diet-indepth-look/" target="_blank">TKD</a>
-or <a href="//www.ruled.me/cyclical-ketogenic-diet-indepth-look/" target="_blank">CKD</a>,
-remember to include net carbs consumed on Macro Grams.
+<li>만약에 <a href="//www.ruled.me/targeted-ketogenic-diet-indepth-look/" target="_blank">TKD</a>
+또는 <a href="//www.ruled.me/cyclical-ketogenic-diet-indepth-look/" target="_blank">CKD</a>,
+Macro Grams에서 섭취하는 순 탄수화물을 포함해야합니다.
 </li>
 </ul>
 <div class="row">
@@ -728,19 +728,19 @@ remember to include net carbs consumed on Macro Grams.
 <table class="table table-hover">
 <thead>
 <tr>
-<th>Protein Ratio <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Number of grams per lb of lean body mass. Recommendation is 1." data-original-title="" title=""></span>
+<th>단백질 비율 <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="마른 체질량 1 파운드 당 그램 수. 권장 사항은 1입니다." data-original-title="" title=""></span>
 </th>
-<th>Macronutrients</th>
-<th>Macro Grams</th>
-<th>Kcal per gram</th>
-<th>Daily Calories</th>
-<th>Daily %</th>
+<th>영양소</th>
+<th>매크로 프로그램</th>
+<th>g당 Kcal</th>
+<th>일 일 칼로리</th>
+<th>매일 %</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><input type="number" id="i_ratio" class="form-control" value="0.8" step="0.01" max="1.2" min="0.69"></td>
-<td>Protein</td>
+<td>단백질</td>
 <td><input type="number" id="o_proteinmacro" class="form-control" disabled=""></td>
 <td>4</td>
 <td><input type="number" id="o_proteincals" class="form-control" disabled=""></td>
@@ -751,11 +751,11 @@ remember to include net carbs consumed on Macro Grams.
 <div class="form">
 <div class="form-group">
 <div class="checkbox"><label><input type="checkbox" id="kgrecommended" name="kgrecommended" value="0">
-Ketogains Recommended</label> <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="1.0g protein / Lean Lb Bodyweight" data-original-title="" title=""></span></div>
+키토제닉 추천</label> <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="1.0g 단백질 / Lean Lb Bodyweight" data-original-title="" title=""></span></div>
 </div>
 </div>
 </td>
-<td>Net Carbs <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="Net Carbs = Total Carbs - Fiber." data-original-title="" title=""></span></td>
+<td>순 탄수화물 <span class="glyphicon glyphicon-question-sign" data-toggle="popover" data-html="true" data-placement="top" data-content="순 탄수화물 = 총 탄수화물 - 섬유." data-original-title="" title=""></span></td>
 <td><input type="number" id="i_carbmacro" class="form-control" value="25"></td>
 <td>4</td>
 <td><input type="number" id="o_carbcals" class="form-control" disabled=""></td>
@@ -763,7 +763,7 @@ Ketogains Recommended</label> <span class="glyphicon glyphicon-question-sign" da
 </tr>
 <tr>
 <td></td>
-<td>Fat</td>
+<td>지방</td>
 <td><input type="number" id="i_fatmacro" class="form-control" value="116"></td>
 <td>9</td>
 <td><input type="number" id="o_fatcals" class="form-control" disabled=""></td>
